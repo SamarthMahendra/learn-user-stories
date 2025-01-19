@@ -122,4 +122,27 @@ describe("AccountManager - Withdraw Money", () => {
     });
 });
 
+describe("AccountManager - View Account Balance", () => {
+    let accountManager: AccountManager;
+
+    beforeEach(() => {
+        accountManager = new AccountManager();
+    });
+
+    test("should successfully view the balance of an account", () => {
+        const ownerName = "John Doe";
+        const email = "john.doe@example.com";
+        const account = accountManager.createAccount(ownerName, email);
+
+        accountManager.deposit(account.accountNumber, 200); // Deposit money to have a balance
+        const result = accountManager.viewBalance(account.accountNumber);
+        expect(result).toBe("Current balance: $200.00");
+    });
+
+    test("should show an error when the account is not found", () => {
+        const result = accountManager.viewBalance("ACC-999999");
+        expect(result).toBe("Account not found.");
+    });
+});
+
 

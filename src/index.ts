@@ -14,7 +14,8 @@ const menu = `
 2. View All Accounts
 3. Deposit Money
 4. Withdraw Money
-5. Exit
+5. View Account Balance
+6. Exit
 ================================
 Choose an option: `;
 
@@ -34,6 +35,9 @@ function showMenu(): void {
                 withdrawMoney();
                 break;
             case "5":
+                viewBalance();
+                break;
+            case "6":
                 console.log("Exiting. Goodbye!");
                 rl.close();
                 break;
@@ -99,6 +103,14 @@ function withdrawMoney(): void {
             console.log(result);
             showMenu();
         });
+    });
+}
+
+function viewBalance(): void {
+    rl.question("Enter the account number: ", (accountNumber) => {
+        const result = accountManager.viewBalance(accountNumber);
+        console.log(result);
+        showMenu();
     });
 }
 
