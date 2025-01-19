@@ -79,3 +79,47 @@ describe("AccountManager - Deposit Money", () => {
     });
 });
 
+describe("AccountManager - Withdraw Money", () => {
+    let accountManager: AccountManager;
+
+    beforeEach(() => {
+        accountManager = new AccountManager();
+    });
+
+    test("should successfully withdraw money from an account", () => {
+        const ownerName = "John Doe";
+        const email = "john.doe@example.com";
+        const account = accountManager.createAccount(ownerName, email);
+
+        accountManager.deposit(account.accountNumber, 200); // Deposit to have sufficient balance
+        const result = accountManager.withdraw(account.accountNumber, 100);
+        expect(result).toBe("Withdrawal successful. New balance: $100.00");
+        expect(account.balance).toBe(100);
+    });
+
+    test("should reject withdrawal with insufficient funds", () => {
+        const ownerName = "Jane Doe";
+        const email = "jane.doe@example.com";
+        const account = accountManager.createAccount(ownerName, email);
+
+        const result = accountManager.withdraw(account.accountNumber, 100);
+        expect(result).toBe("Insufficient funds for this withdrawal.");
+        expect(account.balance).toBe(0);
+    });
+
+    test("should reject withdrawal with invalid (zero or negative) amount", () => {
+        const ownerName = "Alice Doe";
+        const email = "alice.doe@example.com";
+        const account = accountManager.createAccount(ownerName, email);
+
+        const result = accountManager.withdraw(account.accountNumber, -50);
+        expect(result).toBe("Withdrawal amount must be greater than zero.");
+    });
+
+    test("should reject withdrawal if account not found", () => {
+        const result = accountManager.withdraw("ACC-999999", 50);
+        expect(result).toBe("Account not found.");
+    });
+});
+
+
