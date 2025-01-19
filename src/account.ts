@@ -34,6 +34,9 @@ export class AccountManager {
      * @returns A success message if deposit is successful, or an error message if invalid amount
      */
     deposit(accountNumber: string, amount: number): string {
+        if (isNaN(amount)) {
+            return "Invalid deposit amount.";
+        }
         const account = this.accounts.find((account) => account.accountNumber === accountNumber);
 
         if (!account) {
@@ -71,6 +74,21 @@ export class AccountManager {
 
         account.balance -= amount;
         return `Withdrawal successful. New balance: $${account.balance.toFixed(2)}`;
+    }
+
+    /**
+     * View the balance of an account.
+     * @param accountNumber The account number to view the balance for
+     * @returns The current balance or an error message if the account is not found
+     */
+    viewBalance(accountNumber: string): string {
+        const account = this.accounts.find((account) => account.accountNumber === accountNumber);
+
+        if (!account) {
+            return "Account not found.";
+        }
+
+        return `Current balance: $${account.balance.toFixed(2)}`;
     }
 
     /**
