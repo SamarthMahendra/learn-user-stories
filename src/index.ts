@@ -1,11 +1,9 @@
 import * as readline from "readline";
-import AccountManager from "./account";
+import { AccountManager } from "./account";
 
 
-// Create an instance of AccountManager
 const accountManager = new AccountManager();
 
-// Initialize readline interface
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -15,13 +13,11 @@ const menu = `
 ===== Bank Account Manager =====
 1. Create a New Account
 2. View All Accounts
-3. Exit
+3. Deposit Money
+4. Exit
 ================================
 Choose an option: `;
 
-/**
- * Display the main menu and handle user input.
- */
 function showMenu(): void {
     rl.question(menu, (choice) => {
         switch (choice.trim()) {
@@ -32,6 +28,9 @@ function showMenu(): void {
                 viewAccounts();
                 break;
             case "3":
+                depositMoney();
+                break;
+            case "4":
                 console.log("Exiting. Goodbye!");
                 rl.close();
                 break;
@@ -42,9 +41,6 @@ function showMenu(): void {
     });
 }
 
-/**
- * Prompt the user to create a new account.
- */
 function createAccount(): void {
     rl.question("Enter the owner's name: ", (ownerName) => {
         rl.question("Enter the email: ", (email) => {
@@ -63,9 +59,6 @@ function createAccount(): void {
     });
 }
 
-/**
- * Display all accounts.
- */
 function viewAccounts(): void {
     const accounts = accountManager.getAllAccounts();
     if (accounts.length === 0) {
@@ -84,5 +77,15 @@ function viewAccounts(): void {
     showMenu();
 }
 
-// Start the menu
+function depositMoney(): void {
+    rl.question("Enter the account number: ", (accountNumber) => {
+        rl.question("Enter the deposit amount: $", (amountStr) => {
+            const amount = parseFloat(amountStr);
+            const result = accountManager.deposit(accountNumber, amount);
+            console.log(result);
+            showMenu();
+        });
+    });
+}
+
 showMenu();
