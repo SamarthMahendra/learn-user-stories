@@ -1,4 +1,5 @@
-import AccountManager from "../src/account";
+import { AccountManager } from "../src/account";
+
 
 describe("AccountManager - Create Bank Account", () => {
     let accountManager: AccountManager;
@@ -45,3 +46,36 @@ describe("AccountManager - Create Bank Account", () => {
         expect(accounts).toContainEqual(account2);
     });
 });
+
+describe("AccountManager - Deposit Money", () => {
+    let accountManager: AccountManager;
+
+    beforeEach(() => {
+        accountManager = new AccountManager();
+    });
+
+    test("should successfully deposit money into an account", () => {
+        const ownerName = "John Doe";
+        const email = "john.doe@example.com";
+        const account = accountManager.createAccount(ownerName, email);
+
+        const result = accountManager.deposit(account.accountNumber, 100);
+        expect(result).toBe("Deposit successful. New balance: $100.00");
+        expect(account.balance).toBe(100);
+    });
+
+    test("should reject deposit with invalid (zero or negative) amount", () => {
+        const ownerName = "Jane Doe";
+        const email = "jane.doe@example.com";
+        const account = accountManager.createAccount(ownerName, email);
+
+        const result = accountManager.deposit(account.accountNumber, -50);
+        expect(result).toBe("Deposit amount must be greater than zero.");
+    });
+
+    test("should reject deposit if account not found", () => {
+        const result = accountManager.deposit("ACC-999999", 100);
+        expect(result).toBe("Account not found.");
+    });
+});
+
