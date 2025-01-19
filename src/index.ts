@@ -1,7 +1,6 @@
 import * as readline from "readline";
 import { AccountManager } from "./account";
 
-
 const accountManager = new AccountManager();
 
 const rl = readline.createInterface({
@@ -14,7 +13,8 @@ const menu = `
 1. Create a New Account
 2. View All Accounts
 3. Deposit Money
-4. Exit
+4. Withdraw Money
+5. Exit
 ================================
 Choose an option: `;
 
@@ -31,6 +31,9 @@ function showMenu(): void {
                 depositMoney();
                 break;
             case "4":
+                withdrawMoney();
+                break;
+            case "5":
                 console.log("Exiting. Goodbye!");
                 rl.close();
                 break;
@@ -82,6 +85,17 @@ function depositMoney(): void {
         rl.question("Enter the deposit amount: $", (amountStr) => {
             const amount = parseFloat(amountStr);
             const result = accountManager.deposit(accountNumber, amount);
+            console.log(result);
+            showMenu();
+        });
+    });
+}
+
+function withdrawMoney(): void {
+    rl.question("Enter the account number: ", (accountNumber) => {
+        rl.question("Enter the withdrawal amount: $", (amountStr) => {
+            const amount = parseFloat(amountStr);
+            const result = accountManager.withdraw(accountNumber, amount);
             console.log(result);
             showMenu();
         });

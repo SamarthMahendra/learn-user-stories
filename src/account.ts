@@ -34,9 +34,6 @@ export class AccountManager {
      * @returns A success message if deposit is successful, or an error message if invalid amount
      */
     deposit(accountNumber: string, amount: number): string {
-        if (isNaN(amount)) {
-            return "Invalid amount.";
-        }
         const account = this.accounts.find((account) => account.accountNumber === accountNumber);
 
         if (!account) {
@@ -49,6 +46,31 @@ export class AccountManager {
 
         account.balance += amount;
         return `Deposit successful. New balance: $${account.balance.toFixed(2)}`;
+    }
+
+    /**
+     * Withdraw money from an account.
+     * @param accountNumber The account number to withdraw from
+     * @param amount The amount to withdraw
+     * @returns A success message if withdrawal is successful, or an error message if insufficient funds
+     */
+    withdraw(accountNumber: string, amount: number): string {
+        const account = this.accounts.find((account) => account.accountNumber === accountNumber);
+
+        if (!account) {
+            return "Account not found.";
+        }
+
+        if (amount <= 0) {
+            return "Withdrawal amount must be greater than zero.";
+        }
+
+        if (account.balance < amount) {
+            return "Insufficient funds for this withdrawal.";
+        }
+
+        account.balance -= amount;
+        return `Withdrawal successful. New balance: $${account.balance.toFixed(2)}`;
     }
 
     /**
